@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
+
+	<bean id="taskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+		<!-- 核心线程数 -->
+		<property name="corePoolSize" value="10" />
+		<!-- 最大线程数 -->
+		<property name="maxPoolSize" value="20" />
+		<!-- 队列最大长度 >=mainExecutor.maxSize -->
+		<property name="queueCapacity" value="200" />
+		<!-- 线程池维护线程所允许的空闲时间 -->
+		<property name="keepAliveSeconds" value="100" />
+		<!-- 线程池对拒绝任务(无线程可用)的处理策略 -->
+		<property name="rejectedExecutionHandler">
+			<bean class="java.util.concurrent.ThreadPoolExecutor$CallerRunsPolicy" />
+		</property>
+	</bean>
+
+	<bean id="httpClientFactory" class="com.chenjh.util.http.CustomHttpClientFactory">
+		<property name="timeout" value="${request.config.timeout}"></property>
+		<property name="enableSSL" value="${request.config.enableSSL}"></property>
+		<!--<property name="httpProxy" ref="hwProxy"></property> -->
+	</bean>
+
+	<bean id="downLoadFileHandler" class="com.chenjh.handler.nvd.DownloadFileHandler">
+		<property name="httpClientFactory" ref="httpClientFactory"></property>
+		<property name="metaUrl" value="${crawler.destination.meta.url}"></property>
+		<property name="destUrl" value="${crawler.destination.url}"></property>
+		<property name="beginYear" value="${crawler.begin.year}"></property>
+		<property name="modifyUrl" value="${crawler.modify.name}"></property>
+		<property name="rootPath" value="${crawler.file.root.path}"></property>
+		<property name="taskIdx" value="1"></property>
+		<property name="taskName" value="DOWNLOAD"></property>
+	</bean>
+
+	<bean id="fileProcHandler" class="com.chenjh.handler.nvd.FileProcHandler">
+		<property name="taskIdx" value="2"></property>
+		<property name="taskName" value="PARSE FILE"></property>
+	</bean>
+
+	<bean id="vulnInfoHandler" class="com.chenjh.handler.nvd.NvdVulnInfoHandler">
+		<property name="taskIdx" value="3"></property>
+		<property name="taskName" value="PARSE VUL_INFO"></property>
+	</bean>
+
+	<bean id="pageInfoHandler" class="com.chenjh.handler.nvd.NvdPageInfoHandler">
+		<property name="detailInfoPrefix" value="${nvd.detail.page.url}"></property>
+		<property name="pubDateStart" value="${nvd.vul.pubdate.start}"></property>
+		<property name="force" value="true"></property>
+		<property name="taskIdx" value="4"></property>
+		<property name="taskName" value="PARSE CVSS INFO"></property>
+	</bean>
+
+	<!-- 爬取任务的控制器 crawlTaskId ： 任务id，为空表示执行新任务，具体指表示执行已有任务 vulSource：1 vulnDB,2 NVD allDataTask 是否全量任务 taskHandlerList ： 执行任务列表，按顺序执行 -->
+	<bean id="crawlController" class="com.chenjh.controller.CrawlController" scope="prototype">
+		<property name="vulSource" value="2"></property>
+		<property name="allDataTask" value="true"></property>
+		<!--<property name="allDataTask" value="false"></property>-->
+		<property name="taskHandlerList">
+			<list>
+				<ref bean="downLoadFileHandler" />
+				<ref bean="fileProcHandler" />
+				<ref bean="vulnInfoHandler" />
+				<ref bean="pageInfoHandler" />
+			</list>
+		</property>
+	</bean>
+
+</beans>

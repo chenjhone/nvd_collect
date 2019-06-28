@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd 
+    http://www.springframework.org/schema/tx
+    http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
+
+	<!-- mybatis集成，不再需要mybaits的sqlmap-config配置文件 -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="databaseIdProvider" ref="databaseIdProvider" />
+		<property name="mapperLocations" value="classpath*:mapper/*.xml"/>
+	</bean>
+	
+	<!-- 扫描并加载所有的Mapper -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.chenjh.mapper" />
+	</bean>
+
+	<!-- transaction config begin -->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
+	<!-- 事务注解驱动 -->
+	<tx:annotation-driven transaction-manager="transactionManager" />
+
+	<!-- 多数据库支持配置 -->
+	<bean id="vendorProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+		<property name="properties">
+			<props>
+				<prop key="SQL Server">sqlserver</prop>
+				<prop key="DB2">db2</prop>
+				<prop key="Oracle">oracle</prop>
+				<prop key="MySQL">mysql</prop>
+			</props>
+		</property>
+	</bean>
+	
+	<bean id="databaseIdProvider" class="org.apache.ibatis.mapping.VendorDatabaseIdProvider">
+		<property name="properties" ref="vendorProperties" />
+	</bean>
+	
+</beans>

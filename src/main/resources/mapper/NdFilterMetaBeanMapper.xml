@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chenjh.mapper.NdFilterMetaBeanMapper">
+    <resultMap id="BaseResultMap" type="com.chenjh.domain.nvd.NdFilterMetaBean">
+        <id column="FEED" property="feed" jdbcType="VARCHAR"/>
+        <result column="LAST_MODIFIED_DATE" property="lastModifiedDate" jdbcType="TIMESTAMP"/>
+        <result column="FILE_SIZE" property="fileSize" jdbcType="INTEGER"/>
+        <result column="ZIP_SIZE" property="zipSize" jdbcType="INTEGER"/>
+        <result column="GZ_SIZE" property="gzSize" jdbcType="INTEGER"/>
+        <result column="SHA_DENSE" property="shaDense" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+		FEED,LAST_MODIFIED_DATE,FILE_SIZE,ZIP_SIZE,GZ_SIZE,SHA_DENSE
+	</sql>
+
+    <insert id="saveNdFilterMeta" parameterType="com.chenjh.domain.nvd.NdFilterMetaBean">
+        insert into T_ND_FILTER_META (<include refid="Base_Column_List"/>)
+        values (#{feed,jdbcType=VARCHAR},
+        #{lastModifiedDate,jdbcType=TIMESTAMP},
+        #{fileSize,jdbcType=INTEGER},
+        #{zipSize,jdbcType=INTEGER},
+        #{gzSize,jdbcType=INTEGER},
+        #{shaDense,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <update id="updateNdFilterMeta" parameterType="com.chenjh.domain.nvd.NdFilterMetaBean">
+        update T_ND_FILTER_META
+        <set>
+            <if test="bean.shaDense != null">
+                LAST_MODIFIED_DATE = #{bean.lastModifiedDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="bean.shaDense != null">
+                FILE_SIZE = #{bean.fileSize,jdbcType=INTEGER},
+            </if>
+            <if test="bean.shaDense != null">
+                ZIP_SIZE = #{bean.zipSize,jdbcType=INTEGER},
+            </if>
+            <if test="bean.shaDense != null">
+                GZ_SIZE = #{bean.gzSize,jdbcType=INTEGER},
+            </if>
+            <if test="bean.shaDense != null">
+                SHA_DENSE = #{bean.shaDense,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where FEED = #{bean.feed,jdbcType=VARCHAR}
+
+    </update>
+
+    <delete id="deleteNdFilterMeta">
+        delete
+        from   T_ND_FILTER_META
+        where   FEED = #{bean.feed,jdbcType=VARCHAR}
+    </delete>
+
+    <select id="listNdFilterMeta" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from T_ND_FILTER_META
+        where 1=1
+        <if test="bean.feed != null">
+            and FEED = #{feed,jdbcType=VARCHAR}
+        </if>
+        <if test="bean.shaDense != null">
+            and SHA_DENSE = #{shaDense,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+    <select id="findNdFilterMeta" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from T_ND_FILTER_META
+        where FEED = #{feed,jdbcType=VARCHAR}
+        and SHA_DENSE = #{shaDense,jdbcType=VARCHAR}
+    </select>
+</mapper>

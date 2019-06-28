@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.chenjh.mapper.NdDownloadFileBeanMapper">
+	<resultMap id="BaseResultMap" type="com.chenjh.domain.nvd.NdDownloadFileBean">
+		<id column="FILE_ID" property="fileId" jdbcType="BIGINT" />
+		<result column="CRAWL_ID" property="crawlId" jdbcType="BIGINT" />
+		<result column="FEED" property="feed" jdbcType="VARCHAR" />
+		<result column="FILE_PATH" property="filePath" jdbcType="VARCHAR" />
+		<result column="FILE_NAME" property="fileName" jdbcType="VARCHAR" />
+		<result column="FILE_ORG_NAME" property="fileOrgName" jdbcType="VARCHAR" />
+		<result column="FILE_SIZE" property="fileSize" jdbcType="BIGINT" />
+		<result column="STATUS" property="status" jdbcType="INTEGER" />
+		<result column="CREATED_TIME" property="createdTime" jdbcType="TIMESTAMP" />
+		<result column="MODIFIED_TIME" property="modifiedTime"  jdbcType="TIMESTAMP" />
+		<result column="NOTE" property="note" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		FILE_ID, CRAWL_ID, FEED, FILE_PATH, FILE_NAME, FILE_ORG_NAME, FILE_SIZE,
+		STATUS,
+		CREATED_TIME, MODIFIED_TIME, NOTE
+	</sql>
+
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from T_ND_DOWNLOAD_FILE
+		where FILE_ID = #{fileId,jdbcType=BIGINT}
+	</select>
+
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from T_ND_DOWNLOAD_FILE
+		where FILE_ID = #{fileId,jdbcType=BIGINT}
+	</delete>
+
+	<insert id="insert" parameterType="com.chenjh.domain.nvd.NdDownloadFileBean">
+		insert into T_ND_DOWNLOAD_FILE (CRAWL_ID, FEED,
+		FILE_PATH,
+		FILE_NAME, FILE_ORG_NAME,
+		FILE_SIZE, STATUS, CREATED_TIME,
+		MODIFIED_TIME, NOTE)
+		values (#{crawlId,jdbcType=BIGINT},
+		#{feed,jdbcType=VARCHAR},
+		#{filePath,jdbcType=VARCHAR}, #{fileName,jdbcType=VARCHAR},
+		#{fileOrgName,jdbcType=VARCHAR},
+		#{fileSize,jdbcType=BIGINT},
+		#{status,jdbcType=INTEGER}, now(),
+		now(), #{note,jdbcType=VARCHAR})
+	</insert>
+
+	<insert id="insertSelective" parameterType="com.chenjh.domain.nvd.NdDownloadFileBean">
+		insert into T_ND_DOWNLOAD_FILE
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="crawlId != null">
+				CRAWL_ID,
+			</if>
+			<if test="feed != null">
+				FEED,
+			</if>
+			<if test="filePath != null">
+				FILE_PATH,
+			</if>
+			<if test="fileName != null">
+				FILE_NAME,
+			</if>
+			<if test="fileOrgName != null">
+				FILE_ORG_NAME,
+			</if>
+			<if test="fileSize != null">
+				FILE_SIZE,
+			</if>
+			<if test="status != null">
+				STATUS,
+			</if>
+			<if test="createdTime != null">
+				CREATED_TIME,
+			</if>
+			<if test="modifiedTime != null">
+				MODIFIED_TIME,
+			</if>
+			<if test="note != null">
+				NOTE,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="crawlId != null">
+				#{crawlId,jdbcType=BIGINT},
+			</if>
+			<if test="feed != null">
+				#{feed,jdbcType=VARCHAR},
+			</if>
+			<if test="filePath != null">
+				#{filePath,jdbcType=VARCHAR},
+			</if>
+			<if test="fileName != null">
+				#{fileName,jdbcType=VARCHAR},
+			</if>
+			<if test="fileOrgName != null">
+				#{fileOrgName,jdbcType=VARCHAR},
+			</if>
+			<if test="fileSize != null">
+				#{fileSize,jdbcType=BIGINT},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=INTEGER},
+			</if>
+			<if test="createdTime != null">
+				#{createdTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="modifiedTime != null">
+				#{modifiedTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="note != null">
+				#{note,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+
+	<update id="updateByPrimaryKeySelective" parameterType="com.chenjh.domain.nvd.NdDownloadFileBean">
+		update T_ND_DOWNLOAD_FILE
+		<set>
+			<if test="crawlId != null">
+				CRAWL_ID = #{crawlId,jdbcType=BIGINT},
+			</if>
+			<if test="feed != null">
+				FEED = #{feed,jdbcType=VARCHAR},
+			</if>
+			<if test="filePath != null">
+				FILE_PATH = #{filePath,jdbcType=VARCHAR},
+			</if>
+			<if test="fileName != null">
+				FILE_NAME = #{fileName,jdbcType=VARCHAR},
+			</if>
+			<if test="fileOrgName != null">
+				FILE_ORG_NAME = #{fileOrgName,jdbcType=VARCHAR},
+			</if>
+			<if test="fileSize != null">
+				FILE_SIZE = #{fileSize,jdbcType=BIGINT},
+			</if>
+			<if test="status != null">
+				STATUS = #{status,jdbcType=INTEGER},
+			</if>
+			<if test="createdTime != null">
+				CREATED_TIME = #{createdTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="modifiedTime != null">
+				MODIFIED_TIME = #{modifiedTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="note != null">
+				NOTE = #{note,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where FILE_ID = #{fileId,jdbcType=BIGINT}
+	</update>
+
+	<update id="updateByPrimaryKey" parameterType="com.chenjh.domain.nvd.NdDownloadFileBean">
+		update T_ND_DOWNLOAD_FILE
+		set CRAWL_ID = #{crawlId,jdbcType=BIGINT},
+		FEED = #{feed,jdbcType=VARCHAR},
+		FILE_PATH = #{filePath,jdbcType=VARCHAR},
+		FILE_NAME = #{fileName,jdbcType=VARCHAR},
+		FILE_ORG_NAME = #{fileOrgName,jdbcType=VARCHAR},
+		FILE_SIZE = #{fileSize,jdbcType=BIGINT},
+		STATUS = #{status,jdbcType=INTEGER},
+		CREATED_TIME = #{createdTime,jdbcType=TIMESTAMP},
+		MODIFIED_TIME = #{modifiedTime,jdbcType=TIMESTAMP},
+		NOTE = #{note,jdbcType=VARCHAR}
+		where FILE_ID = #{fileId,jdbcType=BIGINT}
+	</update>
+
+	<select id="queryZipFileList" resultMap="BaseResultMap"
+		parameterType="com.chenjh.domain.nvd.NdDownloadFileBean">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM T_ND_DOWNLOAD_FILE T
+		WHERE 1 = 1
+		<if test="status != null">
+			AND T.STATUS = #{status,jdbcType=INTEGER}
+		</if>
+		<if test="feed != null">
+			AND T.FEED = #{feed,jdbcType=VARCHAR}
+		</if>
+		<if test="crawlId != null">
+			AND T.CRAWL_ID = #{crawlId,jdbcType=BIGINT}
+		</if>
+	</select>
+
+</mapper>

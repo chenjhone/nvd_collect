@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chenjh.mapper.NvdVulInfoBeanMapper">
+
+	<resultMap id="BaseResultMap" type="com.chenjh.domain.nvd.NvdVulInfoBean">
+		<id column="CVE_ID" property="cveId" jdbcType="VARCHAR" />
+		<result column="VUL_TITLE" property="vulTitle" jdbcType="VARCHAR" />
+		<result column="VUL_DESCRIPTION" property="vulDescription" jdbcType="VARCHAR" />
+		<result column="CVSS_VER" property="cvssVer" jdbcType="VARCHAR" />
+		<result column="CVSS_SCORE" property="cvssScore" jdbcType="DECIMAL" />
+		<result column="CVSS_VECTOR" property="cvssVector" jdbcType="VARCHAR" />
+		<result column="PUBLISHED_DATE" property="publishedDate"  jdbcType="TIMESTAMP" />
+		<result column="VUL_MOD_DATE" property="vulModDate" jdbcType="TIMESTAMP" />
+		<result column="PROC_STATUS" property="procStatus" jdbcType="DECIMAL" />
+		<result column="CREATED_TIME" property="createdTime" jdbcType="TIMESTAMP" />
+		<result column="MODIFIED_TIME" property="modifiedTime"  jdbcType="TIMESTAMP" />
+		<result column="NOTE" property="note" jdbcType="VARCHAR" />
+		<result column="CVSS_STATUS" property="cvssStatus" jdbcType="INTEGER" />
+		<result column="STATUS" property="status" jdbcType="INTEGER" />
+		<result column="FLAG" property="flag" jdbcType="INTEGER" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		CVE_ID, VUL_TITLE, VUL_DESCRIPTION, CVSS_VER, CVSS_SCORE,
+		CVSS_VECTOR,
+		PUBLISHED_DATE, VUL_MOD_DATE, PROC_STATUS, CREATED_TIME,
+		MODIFIED_TIME, NOTE, CVSS_STATUS, STATUS, FLAG
+	</sql>
+
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from T_ND_VUL_INFO
+		where CVE_ID = #{cveId,jdbcType=VARCHAR}
+	</select>
+
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from
+		T_ND_VUL_INFO
+		where CVE_ID = #{cveId,jdbcType=VARCHAR}
+	</delete>
+
+	<insert id="insert" parameterType="com.chenjh.domain.nvd.NvdVulInfoBean">
+		insert into T_ND_VUL_INFO
+		(CVE_ID, VUL_TITLE, VUL_DESCRIPTION,
+		CVSS_VER, CVSS_SCORE, CVSS_VECTOR,
+		PUBLISHED_DATE, VUL_MOD_DATE,
+		PROC_STATUS, CREATED_TIME, MODIFIED_TIME,
+		NOTE, CVSS_STATUS, STATUS, FLAG)
+		values (#{cveId,jdbcType=VARCHAR}, #{vulTitle,jdbcType=VARCHAR},
+		#{vulDescription,jdbcType=VARCHAR},
+		#{cvssVer,jdbcType=VARCHAR},
+		#{cvssScore,jdbcType=DECIMAL}, #{cvssVector,jdbcType=VARCHAR},
+		#{publishedDate,jdbcType=TIMESTAMP}, #{vulModDate,jdbcType=TIMESTAMP},
+		#{procStatus,jdbcType=DECIMAL}, #{createdTime,jdbcType=TIMESTAMP},
+		#{modifiedTime,jdbcType=TIMESTAMP},
+		#{note,jdbcType=VARCHAR}, #{cvssStatus,jdbcType=INTEGER}, #{status,jdbcType=INTEGER},
+		#{flag,jdbcType=INTEGER})
+	</insert>
+	
+	<insert id="insertSelective" parameterType="com.chenjh.domain.nvd.NvdVulInfoBean">
+
+		insert into T_ND_VUL_INFO
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="cveId != null">
+				CVE_ID,
+			</if>
+			<if test="vulTitle != null">
+				VUL_TITLE,
+			</if>
+			<if test="vulDescription != null">
+				VUL_DESCRIPTION,
+			</if>
+			<if test="cvssVer != null">
+				CVSS_VER,
+			</if>
+			<if test="cvssScore != null">
+				CVSS_SCORE,
+			</if>
+			<if test="cvssVectory != null">
+				CVSS_VECTOR,
+			</if>
+			<if test="publishedDate != null">
+				PUBLISHED_DATE,
+			</if>
+			<if test="vulModDate != null">
+				VUL_MOD_DATE,
+			</if>
+			<if test="procStatus != null">
+				PROC_STATUS,
+			</if>
+			<if test="createdTime != null">
+				CREATED_TIME,
+			</if>
+			<if test="modifiedTime != null">
+				MODIFIED_TIME,
+			</if>
+			<if test="note != null">
+				NOTE,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="cveId != null">
+				#{cveId,jdbcType=VARCHAR},
+			</if>
+			<if test="vulTitle != null">
+				#{vulTitle,jdbcType=VARCHAR},
+			</if>
+			<if test="vulDescription != null">
+				#{vulDescription,jdbcType=VARCHAR},
+			</if>
+			<if test="cvssVer != null">
+				#{cvssVer,jdbcType=VARCHAR},
+			</if>
+			<if test="cvssScore != null">
+				#{cvssScore,jdbcType=DECIMAL},
+			</if>
+			<if test="cvssVector != null">
+				#{CVSS_VECTOR,jdbcType=VARCHAR},
+			</if>
+			<if test="publishedDate != null">
+				#{publishedDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="vulModDate != null">
+				#{vulModDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="procStatus != null">
+				#{procStatus,jdbcType=DECIMAL},
+			</if>
+			<if test="createdTime != null">
+				#{createdTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="modifiedTime != null">
+				#{modifiedTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="note != null">
+				#{note,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+
+	<update id="updateByPrimaryKeySelective" parameterType="com.chenjh.domain.nvd.NvdVulInfoBean">
+		update T_ND_VUL_INFO
+		<set>
+			<if test="vulTitle != null">
+				VUL_TITLE = #{vulTitle,jdbcType=VARCHAR},
+			</if>
+			<if test="vulDescription != null">
+				VUL_DESCRIPTION = #{vulDescription,jdbcType=VARCHAR},
+			</if>
+			<if test="cvssVer != null">
+				CVSS_VER = #{cvssVer,jdbcType=VARCHAR},
+			</if>
+			<if test="cvssScore != null">
+				CVSS_SCORE = #{cvssScore,jdbcType=DECIMAL},
+			</if>
+			<if test="cvssVector != null">
+				CVSS_VECTOR = #{cvssVector,jdbcType=VARCHAR},
+			</if>
+			<if test="publishedDate != null">
+				PUBLISHED_DATE = #{publishedDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="vulModDate != null">
+				VUL_MOD_DATE = #{vulModDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="procStatus != null">
+				PROC_STATUS = #{procStatus,jdbcType=DECIMAL},
+			</if>
+			<if test="createdTime != null">
+				CREATED_TIME = #{createdTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="modifiedTime != null">
+				MODIFIED_TIME = #{modifiedTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="note != null">
+				NOTE = #{note,jdbcType=VARCHAR},
+			</if>
+			<if test="cvssStatus != null">
+				CVSS_STATUS = #{cvssStatus,jdbcType=INTEGER},
+			</if>
+			<if test="status != null">
+				STATUS = #{status,jdbcType=INTEGER},
+			</if>
+			<if test="flag != null">
+				FLAG = #{flag,jdbcType=INTEGER},
+			</if>
+		</set>
+		where CVE_ID = #{cveId,jdbcType=VARCHAR}
+	</update>
+
+	<update id="updateByPrimaryKey" parameterType="com.chenjh.domain.nvd.NvdVulInfoBean">
+		update
+		T_ND_VUL_INFO
+		set VUL_TITLE = #{vulTitle,jdbcType=VARCHAR},
+		VUL_DESCRIPTION = #{vulDescription,jdbcType=VARCHAR},
+		CVSS_VER =
+		#{cvssVer,jdbcType=VARCHAR},
+		CVSS_SCORE =
+		#{cvssScore,jdbcType=DECIMAL},
+		CVSS_VECTOR =
+		#{cvssVector,jdbcType=VARCHAR},
+		PUBLISHED_DATE =
+		#{publishedDate,jdbcType=TIMESTAMP},
+		VUL_MOD_DATE =
+		#{vulModDate,jdbcType=TIMESTAMP},
+		PROC_STATUS =
+		#{procStatus,jdbcType=DECIMAL},
+		CREATED_TIME =
+		#{createdTime,jdbcType=TIMESTAMP},
+		MODIFIED_TIME =
+		#{modifiedTime,jdbcType=TIMESTAMP},
+		NOTE = #{note,jdbcType=VARCHAR},
+		CVSS_STATUS = #{cvssStatus,jdbcType=INTEGER},
+		STATUS = #{status,jdbcType=INTEGER},
+		FLAG = #{flag,jdbcType=INTEGER}
+		where CVE_ID = #{cveId,jdbcType=VARCHAR}
+	</update>
+
+ 	<select id="queryCveByCrawlId"  resultType="java.lang.String">
+			SELECT CVE_ID
+					  FROM T_ND_VUL_INFO A
+					 WHERE 1 = 1
+					   AND A.PROC_STATUS = 0
+					   AND A.CVSS_STATUS = 0
+					   AND A.STATUS = 1
+			<if test="crawlId != null">
+					   AND EXISTS (SELECT 1
+					          FROM T_ND_DOWNLOAD_PROC B
+					         WHERE B.CVE_ID = A.CVE_ID
+					           AND B.FILE_ID IN (SELECT T.FILE_ID
+					                               FROM T_ND_DOWNLOAD_FILE T
+					                              WHERE T.CRAWL_ID = #{crawlId,jdbcType = BIGINT}))
+			</if>
+			<![CDATA[	 AND ROWNUM <= 50 ]]>
+	</select>
+
+	 <select id="queryCveByPubDate" parameterType="java.util.Map"  resultType="java.lang.String">
+		<![CDATA[	
+			SELECT CVE_ID
+					  FROM T_ND_VUL_INFO A
+					 WHERE 1 = 1
+					   AND A.CVSS_STATUS = 0
+					   AND A.STATUS = 1
+					   AND A.PUBLISHED_DATE >= #{pubDateStart,jdbcType=TIMESTAMP}
+					   AND A.PUBLISHED_DATE <= #{pubDateEnd,jdbcType=TIMESTAMP}
+				   AND ROWNUM <= 50
+		]]>
+	</select>
+
+	<update id="initCveCvssStatus" >
+		UPDATE T_ND_VUL_INFO A
+				SET A.CVSS_STATUS = 0, 
+						A.MODIFIED_TIME = now()
+					 WHERE 1 = 1
+					 	AND A.STATUS = 1
+					 	
+						<if test="crawlId != null">
+							AND A.PROC_STATUS = 0
+						   AND EXISTS (SELECT 1
+						          FROM T_ND_DOWNLOAD_PROC B
+						         WHERE B.CVE_ID = A.CVE_ID
+						           AND B.FILE_ID IN (SELECT T.FILE_ID
+						                               FROM T_ND_DOWNLOAD_FILE T
+						                              WHERE T.CRAWL_ID = #{crawlId,jdbcType = BIGINT}))
+						</if>
+						<if test="!force">
+							<![CDATA[	 AND A.CVSS_STATUS <> 1 ]]>
+						</if>
+					   <if test="fromDate != null">
+					   		<![CDATA[ AND A.PUBLISHED_DATE >= #{fromDate,jdbcType=TIMESTAMP} ]]>
+					   </if>
+					   <if test="toDate != null">
+					   		<![CDATA[ AND A.PUBLISHED_DATE <= #{toDate,jdbcType=TIMESTAMP} ]]>
+					   </if>
+	</update> 
+
+ 	<update id="updateVulInfoForLock">
+		UPDATE T_ND_VUL_INFO T 
+				SET T.CVSS_STATUS = 9, 
+				T.MODIFIED_TIME = now()
+				      WHERE T.CVE_ID IN 
+				      <foreach collection="cveList" index="index" item="cveId" open="(" separator="," close=")">
+				         #{cveId,jdbcType=VARCHAR}
+				     </foreach>
+	</update> 
+
+</mapper>

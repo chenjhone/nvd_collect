@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.chenjh.mapper.CrawlTaskBeanMapper">
+	<resultMap id="BaseResultMap" type="com.chenjh.domain.CrawlTaskBean">
+		<id column="CRAWL_ID" property="crawlId" jdbcType="BIGINT" />
+		<result column="VUL_SOURCE" property="vulSource" jdbcType="INTEGER" />
+		<result column="START_TIME" property="startTime" jdbcType="TIMESTAMP" />
+		<result column="END_TIME" property="endTime" jdbcType="TIMESTAMP" />
+		<result column="CURRENT_TASK" property="currentTask" jdbcType="VARCHAR" />
+		<result column="VUL_DOWNLOAD_NUM" property="vulDownloadNum" jdbcType="INTEGER" />
+		<result column="VUL_INSERT_NUM" property="vulInsertNum" jdbcType="INTEGER" />
+		<result column="VUL_UPDATE_NUM" property="vulUpdateNum"  jdbcType="INTEGER" />
+		<result column="TASK_STATUS" property="taskStatus" jdbcType="INTEGER" />
+		<result column="WORK_IP" property="workIp" jdbcType="VARCHAR" />
+		<result column="CREATED_TIME" property="createdTime" jdbcType="TIMESTAMP" />
+		<result column="MODIFIED_TIME" property="modifiedTime"  jdbcType="TIMESTAMP" />
+		<result column="NOTE" property="note" jdbcType="VARCHAR" />
+		<result column="TASK_IDX"  property="taskIdx"  jdbcType="INTEGER" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		CRAWL_ID, VUL_SOURCE, START_TIME, END_TIME, CURRENT_TASK,
+		VUL_DOWNLOAD_NUM, VUL_INSERT_NUM, VUL_UPDATE_NUM, TASK_STATUS,
+		WORK_IP, CREATED_TIME, MODIFIED_TIME, NOTE, TASK_IDX
+	</sql>
+
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from T_CRAWL_TASK where CRAWL_ID = #{crawlId,jdbcType=BIGINT}
+	</select>
+
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from
+		T_CRAWL_TASK where CRAWL_ID = #{crawlId,jdbcType=BIGINT}
+	</delete>
+
+	<insert id="insert" parameterType="com.chenjh.domain.CrawlTaskBean">
+		INSERT INTO T_CRAWL_TASK ( VUL_SOURCE, START_TIME,
+		END_TIME, CURRENT_TASK, VUL_DOWNLOAD_NUM, VUL_INSERT_NUM,
+		VUL_UPDATE_NUM, TASK_STATUS, WORK_IP, CREATED_TIME, MODIFIED_TIME,
+		NOTE, TASK_IDX)
+		VALUES (#{vulSource,jdbcType=INTEGER},
+		#{startTime,jdbcType=TIMESTAMP},
+		#{endTime,jdbcType=TIMESTAMP},
+		#{currentTask,jdbcType=VARCHAR},
+		#{vulDownloadNum,jdbcType=INTEGER},
+		#{vulInsertNum,jdbcType=INTEGER},
+		#{vulUpdateNum,jdbcType=INTEGER},
+		#{taskStatus,jdbcType=INTEGER},
+		#{workIp,jdbcType=VARCHAR}, 
+		now(),
+		now(),
+		#{note,jdbcType=VARCHAR},
+		#{taskIdx, jdbcType=INTEGER}
+		)
+		<selectKey resultType="java.lang.Integer" keyProperty="crawlId">
+			select LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+
+	<insert id="insertSelective" parameterType="com.chenjh.domain.CrawlTaskBean">
+		insert into T_CRAWL_TASK
+		<trim suffixOverrides="," suffix=")" prefix="(">
+			<if test="vulSource != null"> VUL_SOURCE, </if>
+			<if test="startTime != null"> START_TIME, </if>
+			<if test="endTime != null"> END_TIME, </if>
+			<if test="currentTask != null"> CURRENT_TASK, </if>
+			<if test="vulDownloadNum != null"> VUL_DOWNLOAD_NUM, </if>
+			<if test="vulInsertNum != null"> VUL_INSERT_NUM, </if>
+			<if test="vulUpdateNum != null"> VUL_UPDATE_NUM, </if>
+			<if test="taskStatus != null"> TASK_STATUS, </if>
+			<if test="workIp != null"> WORK_IP, </if>
+			<if test="createdTime != null"> CREATED_TIME, </if>
+			<if test="modifiedTime != null"> MODIFIED_TIME, </if>
+			<if test="note != null"> NOTE, </if>
+			<if test="taskIdx != null"> TASK_IDX, </if>
+		</trim>
+		<trim suffixOverrides="," suffix=")" prefix="values (">
+			<if test="vulSource != null"> #{vulSource,jdbcType=INTEGER}, </if>
+			<if test="startTime != null"> #{startTime,jdbcType=TIMESTAMP}, </if>
+			<if test="endTime != null"> #{endTime,jdbcType=TIMESTAMP}, </if>
+			<if test="currentTask != null"> #{currentTask,jdbcType=VARCHAR}, </if>
+			<if test="vulDownloadNum != null"> #{vulDownloadNum,jdbcType=INTEGER}, </if>
+			<if test="vulInsertNum != null"> #{vulInsertNum,jdbcType=INTEGER}, </if>
+			<if test="vulUpdateNum != null"> #{vulUpdateNum,jdbcType=INTEGER}, </if>
+			<if test="taskStatus != null"> #{taskStatus,jdbcType=INTEGER}, </if>
+			<if test="workIp != null"> #{workIp,jdbcType=VARCHAR}, </if>
+			<if test="createdTime != null"> now(), </if>
+			<if test="modifiedTime != null">now(), </if>
+			<if test="note != null"> #{note,jdbcType=VARCHAR}, </if>
+			<if test="taskIdx != null"> #{taskIdx,jdbcType=INTEGER}, </if>
+		</trim>
+	</insert>
+
+	<update id="updateByPrimaryKeySelective" parameterType="com.chenjh.domain.CrawlTaskBean">
+		update T_CRAWL_TASK
+		<set>
+			<if test="vulSource != null"> VUL_SOURCE = #{vulSource,jdbcType=INTEGER}, </if>
+			<if test="startTime != null"> START_TIME = #{startTime,jdbcType=TIMESTAMP}, </if>
+			<if test="endTime != null"> END_TIME = #{endTime,jdbcType=TIMESTAMP}, </if>
+			<if test="currentTask != null"> CURRENT_TASK = #{currentTask,jdbcType=VARCHAR}, </if>
+			<if test="vulDownloadNum != null"> VUL_DOWNLOAD_NUM = #{vulDownloadNum,jdbcType=INTEGER},</if>
+			<if test="vulInsertNum != null"> VUL_INSERT_NUM = #{vulInsertNum,jdbcType=INTEGER}, </if>
+			<if test="vulUpdateNum != null"> VUL_UPDATE_NUM = #{vulUpdateNum,jdbcType=INTEGER}, </if>
+			<if test="taskStatus != null"> TASK_STATUS = #{taskStatus,jdbcType=INTEGER}, </if>
+			<if test="workIp != null"> WORK_IP = #{workIp,jdbcType=VARCHAR}, </if>
+			<if test="createdTime != null"> CREATED_TIME = #{createdTime,jdbcType=TIMESTAMP}, </if>
+			<if test="modifiedTime != null"> MODIFIED_TIME = #{modifiedTime,jdbcType=TIMESTAMP}, </if>
+			<if test="note != null"> NOTE = #{note,jdbcType=VARCHAR}, </if>
+			<if test="taskIdx != null"> TASK_IDX = #{taskIdx,jdbcType=INTEGER}, </if>
+		</set>
+		where CRAWL_ID = #{crawlId,jdbcType=BIGINT}
+	</update>
+
+	<update id="updateByPrimaryKey" parameterType="com.chenjh.domain.CrawlTaskBean">
+		UPDATE
+		T_CRAWL_TASK set VUL_SOURCE = #{vulSource,jdbcType=INTEGER},
+		START_TIME = #{startTime,jdbcType=TIMESTAMP}, END_TIME =
+		#{endTime,jdbcType=TIMESTAMP}, CURRENT_TASK =
+		#{currentTask,jdbcType=VARCHAR}, VUL_DOWNLOAD_NUM =
+		#{vulDownloadNum,jdbcType=INTEGER}, VUL_INSERT_NUM =
+		#{vulInsertNum,jdbcType=INTEGER}, VUL_UPDATE_NUM =
+		#{vulUpdateNum,jdbcType=INTEGER}, TASK_STATUS =
+		#{taskStatus,jdbcType=INTEGER}, WORK_IP = #{workIp,jdbcType=VARCHAR},
+		CREATED_TIME = #{createdTime,jdbcType=TIMESTAMP}, 
+		MODIFIED_TIME = #{modifiedTime,jdbcType=TIMESTAMP},
+		NOTE = #{note,jdbcType=VARCHAR},
+		TASK_IDX = #{taskIdx, jdbcType=INTEGER}
+		WHERE CRAWL_ID = #{crawlId,jdbcType=BIGINT}
+	</update>
+	
+	<update id="updateCrawlEndTime">
+		UPDATE T_CM_SYSTEM_CFG A 
+			SET A.VALUE_DATE = now()
+			WHERE A.KEY = 106
+	</update>
+
+</mapper>

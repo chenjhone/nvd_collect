@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chenjh.mapper.NdDownloadProcBeanMapper" >
+  <resultMap id="BaseResultMap" type="com.chenjh.domain.nvd.NdDownloadProcBean" >
+    <id column="PROC_ID" property="procId" jdbcType="BIGINT" />
+    <result column="FILE_ID" property="fileId" jdbcType="BIGINT" />
+    <result column="CVE_ID" property="cveId" jdbcType="VARCHAR" />
+    <result column="VUL_MOD_DATE" property="vulModDate" jdbcType="TIMESTAMP" />
+    <result column="CVE_ENTRY" property="cveEntry" javaType="java.lang.String" jdbcType="CLOB" />
+    <result column="STATUS" property="status" jdbcType="INTEGER" />
+    <result column="CREATED_TIME" property="createdTime" jdbcType="TIMESTAMP" />
+    <result column="MODIFIED_TIME" property="modifiedTime" jdbcType="TIMESTAMP" />
+    <result column="NOTE" property="note" jdbcType="VARCHAR" />
+    <result column="FLAG" property="flag" jdbcType="INTEGER" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    PROC_ID, FILE_ID, CVE_ID, VUL_MOD_DATE, CVE_ENTRY, STATUS, CREATED_TIME, MODIFIED_TIME, 
+    NOTE, FLAG
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from T_ND_DOWNLOAD_PROC
+    where PROC_ID = #{procId,jdbcType=BIGINT}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from T_ND_DOWNLOAD_PROC
+    where PROC_ID = #{procId,jdbcType=BIGINT}
+  </delete>
+  
+  <insert id="insert" parameterType="com.chenjh.domain.nvd.NdDownloadProcBean" >
+    insert into T_ND_DOWNLOAD_PROC (FILE_ID, CVE_ID,
+      VUL_MOD_DATE, CVE_ENTRY, STATUS, 
+      CREATED_TIME, MODIFIED_TIME, NOTE, FLAG
+      )
+    values (#{fileId,jdbcType=BIGINT}, #{cveId,jdbcType=VARCHAR},
+      #{vulModDate,jdbcType=TIMESTAMP}, #{cveEntry,jdbcType=CLOB}, #{status,jdbcType=INTEGER}, 
+      now(), now(), #{note,jdbcType=VARCHAR}, #{flag,jdbcType=INTEGER}
+      )
+  </insert>
+  
+  <insert id="insertSelective" parameterType="com.chenjh.domain.nvd.NdDownloadProcBean" >
+    insert into T_ND_DOWNLOAD_PROC
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="fileId != null" >
+        FILE_ID,
+      </if>
+      <if test="cveId != null" >
+        CVE_ID,
+      </if>
+      <if test="vulModDate != null" >
+        VUL_MOD_DATE,
+      </if>
+      <if test="cveEntry != null" >
+        CVE_ENTRY,
+      </if>
+      <if test="status != null" >
+        STATUS,
+      </if>
+      <if test="createdTime != null" >
+        CREATED_TIME,
+      </if>
+      <if test="modifiedTime != null" >
+        MODIFIED_TIME,
+      </if>
+      <if test="note != null" >
+        NOTE,
+      </if>
+      <if test="flag != null" >
+        FLAG,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="fileId != null" >
+        #{fileId,jdbcType=BIGINT},
+      </if>
+      <if test="cveId != null" >
+        #{cveId,jdbcType=VARCHAR},
+      </if>
+      <if test="vulModDate != null" >
+        #{vulModDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cveEntry != null" >
+        #{cveEntry,jdbcType=OTHER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createdTime != null" >
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedTime != null" >
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="note != null" >
+        #{note,jdbcType=VARCHAR},
+      </if>
+      <if test="flag != null" >
+        #{flag,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="com.chenjh.domain.nvd.NdDownloadProcBean" >
+    update T_ND_DOWNLOAD_PROC
+    <set >
+      <if test="fileId != null" >
+        FILE_ID = #{fileId,jdbcType=BIGINT},
+      </if>
+      <if test="cveId != null" >
+        CVE_ID = #{cveId,jdbcType=VARCHAR},
+      </if>
+      <if test="vulModDate != null" >
+        VUL_MOD_DATE = #{vulModDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cveEntry != null" >
+        CVE_ENTRY = #{cveEntry,jdbcType=OTHER},
+      </if>
+      <if test="status != null" >
+        STATUS = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createdTime != null" >
+        CREATED_TIME = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedTime != null" >
+        MODIFIED_TIME = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="note != null" >
+        NOTE = #{note,jdbcType=VARCHAR},
+      </if>
+      <if test="flag != null" >
+        FLAG = #{flag,jdbcType=INTEGER},
+      </if>
+    </set>
+    where PROC_ID = #{procId,jdbcType=BIGINT}
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="com.chenjh.domain.nvd.NdDownloadProcBean" >
+    update T_ND_DOWNLOAD_PROC
+    set FILE_ID = #{fileId,jdbcType=BIGINT},
+      CVE_ID = #{cveId,jdbcType=VARCHAR},
+      VUL_MOD_DATE = #{vulModDate,jdbcType=TIMESTAMP},
+      CVE_ENTRY = #{cveEntry,jdbcType=OTHER},
+      STATUS = #{status,jdbcType=INTEGER},
+      CREATED_TIME = #{createdTime,jdbcType=TIMESTAMP},
+      MODIFIED_TIME = #{modifiedTime,jdbcType=TIMESTAMP},
+      NOTE = #{note,jdbcType=VARCHAR},
+      FLAG = #{flag,jdbcType=INTEGER}
+    where PROC_ID = #{procId,jdbcType=BIGINT}
+  </update>
+  
+  <select id="queryCveList" resultMap="BaseResultMap"  parameterType="com.chenjh.domain.nvd.NdDownloadProcBean" >
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM T_ND_DOWNLOAD_PROC A
+    WHERE 1=1
+    <if test="fileId != null" >
+        AND A.FILE_ID = #{fileId,jdbcType=BIGINT}
+      </if>
+      <if test="cveId != null" >
+        AND A.CVE_ID = #{cveId,jdbcType=VARCHAR}
+      </if>
+      <if test="vulModDate != null" >
+        AND A.VUL_MOD_DATE = #{vulModDate,jdbcType=TIMESTAMP}
+      </if>      
+      <if test="status != null" >
+        AND A.STATUS = #{status,jdbcType=INTEGER}
+      </if>  
+      <![CDATA[ AND ROWNUM <= 50 ]]> 
+  </select>
+  
+  <update id="updateProcBeanForLock">
+  	UPDATE T_ND_DOWNLOAD_PROC T
+    SET  T.STATUS = 9,
+      T.MODIFIED_TIME = now()
+    WHERE T.PROC_ID IN 
+	    <foreach collection="procIdList" index="index" item="procId" open="("
+	     separator="," close=")">
+	     	#{procId,jdbcType=BIGINT}
+	   </foreach>    
+  </update> 
+  
+</mapper>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chenjh.mapper.NvdPageInfoBeanMapper">
+	<resultMap id="BaseResultMap" type="com.chenjh.domain.nvd.NvdPageInfoBean">
+		<id column="CVE_ID" property="cveId" jdbcType="VARCHAR" />
+		<result column="PROC_STATUS" property="procStatus" jdbcType="INTEGER" />
+		<result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="LAST_UPDATE_TIME" property="lastUpdateTime"	jdbcType="TIMESTAMP" />
+		<result column="NOTE" property="note" jdbcType="VARCHAR" />
+		<result column="VUL_INFOS" property="vulInfos" javaType="java.lang.String"	jdbcType="CLOB"/>
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		CVE_ID, VUL_INFOS, PROC_STATUS, CREATE_TIME, LAST_UPDATE_TIME, NOTE
+	</sql>
+
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from T_ND_PAGE_INFO
+		where CVE_ID = #{cveId,jdbcType=VARCHAR}
+	</select>
+
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from T_ND_PAGE_INFO
+		where CVE_ID = #{cveId,jdbcType=VARCHAR}
+	</delete>
+
+	<insert id="insert" parameterType="com.chenjh.domain.nvd.NvdPageInfoBean">
+		INSERT INTO T_ND_PAGE_INFO (CVE_ID, 
+		PROC_STATUS, 
+		CREATE_TIME,
+		LAST_UPDATE_TIME, 
+		NOTE, 
+		VUL_INFOS
+		)
+		values (#{cveId,jdbcType=VARCHAR},
+		0,
+		now(),
+		now(), 
+		#{note,jdbcType=VARCHAR},
+		#{vulInfos,jdbcType=CLOB}
+		)
+	</insert>
+	
+	<update id="updateByPrimaryKeySelective" parameterType="com.chenjh.domain.nvd.NvdPageInfoBean">
+		update T_ND_PAGE_INFO
+		<set>
+			<if test="procStatus != null">
+				PROC_STATUS = #{procStatus,jdbcType=INTEGER},
+			</if>
+			<if test="createTime != null">
+				CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="lastUpdateTime != null">
+				LAST_UPDATE_TIME = #{lastUpdateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="note != null">
+				NOTE = #{note,jdbcType=VARCHAR},
+			</if>
+			<if test="vulInfos != null">
+				VUL_INFOS = #{vulInfos,jdbcType=CLOB},
+			</if>
+		</set>
+		where CVE_ID = #{cveId,jdbcType=VARCHAR}
+	</update>
+
+	<update id="updateByPrimaryKey" parameterType="com.chenjh.domain.nvd.NvdPageInfoBean">
+		update T_ND_PAGE_INFO
+		set PROC_STATUS = #{procStatus,jdbcType=INTEGER},
+		CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+		LAST_UPDATE_TIME = #{lastUpdateTime,jdbcType=TIMESTAMP},
+		NOTE = #{note,jdbcType=VARCHAR}
+		where CVE_ID = #{cveId,jdbcType=VARCHAR}
+	</update>
+	
+</mapper>
